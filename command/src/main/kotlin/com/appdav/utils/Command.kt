@@ -2,7 +2,6 @@ package com.appdav.utils
 
 import java.io.File
 import java.util.concurrent.TimeUnit
-import kotlin.io.path.toPath
 import kotlin.system.exitProcess
 
 private fun currentWorkingDir() = File("")
@@ -14,7 +13,7 @@ class Command private constructor(
     private val command: List<String>,
     private val id: Int = nextId(),
     private val outputRedirect: File = File(
-        this::class.java.protectionDomain.codeSource.location.toURI().toPath().toFile(),
+        File(System.getenv("user.home"), "tmp"),
         "tmp${File.separatorChar}output_$id.txt"
     ).apply {
         if (!parentFile.exists()) parentFile.mkdirs()

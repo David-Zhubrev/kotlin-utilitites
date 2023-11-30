@@ -19,7 +19,7 @@ All libraries are distributed with sources jars and provide documentation for pu
 #### Zipper
 Fast way to zip/unzip your files
 ```
-implementation("com.appdav.kotlin-utilities:zipper:$version")
+implementation("com.appdav.kotlin-utilities:zipper:1.0")
 ```
 ##### Usage:
 To zip your files:
@@ -34,7 +34,7 @@ Zipper.unzip(myZipFile, getDestinationFolder())
 #### OS type provider
 Get current OS system type
 ```
-implementation("com.appdav.kotlin-utilities:os-type-provider:$version")
+implementation("com.appdav.kotlin-utilities:os-type-provider:1.0")
 ```
 ##### Usage:
 ```
@@ -53,7 +53,7 @@ OsType is enumeration, which makes it possible to use in exhaustive when-express
 #### Command
 Fast command-line commands usage
 ```
-implementation("com.appdav.kotlin-utilities:command:$version")
+implementation("com.appdav.kotlin-utilities:command:1.1")
 ```
 ##### Usage:
 ```
