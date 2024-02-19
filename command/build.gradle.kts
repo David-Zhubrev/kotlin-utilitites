@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.appdav.kotlin-utilities"
-version = "1.2"
+version = "1.3"
 
 fun repoProperty(name: String) : String{
     return with(Properties()){
