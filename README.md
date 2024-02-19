@@ -53,13 +53,19 @@ OsType is enumeration, which makes it possible to use in exhaustive when-express
 #### Command
 Fast command-line commands usage
 ```
-implementation("com.appdav.kotlin-utilities:command:1.1")
+implementation("com.appdav.kotlin-utilities:command:1.2")
 ```
 ##### Usage:
 ```
 Command("java --version").run(myWorkingDir).printOutput()
 ```
-This executes java --version via system command-line interpreter. 
+This executes java --version via system command-line interpreter.
+You can also pass List<String> instead of String in order to make it more clear (strings are just split by whitespace)
+```
+Command(listOf("java", "--version").run(myWorkingDir, TimeOut(10L, TimeUnit.Seconds)
+```
+You can also pass the TimeOut instance in order to apply time-out for the command
+
 Library also provides extension for both String and List<String>:
 ```
 val result = "java --version".runCommand(workingDir)

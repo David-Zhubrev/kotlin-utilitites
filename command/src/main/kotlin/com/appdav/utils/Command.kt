@@ -1,10 +1,9 @@
 package com.appdav.utils
 
 import java.io.File
-import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
-private fun currentWorkingDir() = File("")
+private fun currentWorkingDir() = File("").absoluteFile
 
 /**
  * Command class provides fast way to use command-line commands
@@ -52,20 +51,22 @@ class Command private constructor(
     /**
      * Run `this` command and wait for it. This method is thread-blocking
      * @param workingDir working directory for `this` command
-     * @param timeout time-out for `this` command. Default value is 10 000 milliseconds (10 seconds)
-     * @param timeoutUnits time units for the timeout value. Default value is 10 000 milliseconds (10 seconds)
+     * @param timeout time-out for `this` command. If null, no time-out applied
      */
     fun run(
         workingDir: File = currentWorkingDir(),
-        timeout: Long = 10_000L,
-        timeoutUnits: TimeUnit = TimeUnit.MILLISECONDS,
+        timeout: TimeOut?,
     ): CommandResult {
         val process = ProcessBuilder(command)
             .directory(workingDir.absoluteFile)
             .redirectOutput(ProcessBuilder.Redirect.to(outputRedirect))
             .redirectError(ProcessBuilder.Redirect.to(outputRedirect))
             .start()
-        process.waitFor(timeout, timeoutUnits)
+        if (timeout != null){
+            process.waitFor(timeout.time, timeout.timeUnit)
+        } else {
+            process.waitFor()
+        }
         return CommandResult(
             process.exitValue(),
             outputRedirect.readText()
@@ -106,7 +107,7 @@ class Command private constructor(
         /**
          * Print output of a command into system's default output (System.out)
          */
-        fun printOutput(){
+        fun printOutput() {
             println(commandOutput)
         }
     }
@@ -115,28 +116,24 @@ class Command private constructor(
 /**
  * Launch command described by `this` String. This extension is thread-blocking
  * @param workingDir working directory for command described by `this` string
- * @param timeout time-out for command described by `this` string. Default value is 10 000 milliseconds (10 seconds)
- * @param timeoutUnits time units for the timeout value. Default value is 10 000 milliseconds (10 seconds)
+ * @param timeout time-out for command described by `this` string. If null, no time-out applied
  * @see Command.run
  * @see Command
  */
+
 fun String.runCommand(
     workingDir: File = currentWorkingDir(),
-    timeout: Long = 10_000L,
-    timeoutUnits: TimeUnit = TimeUnit.MILLISECONDS,
-): Command.CommandResult =
-    Command(this).run(workingDir, timeout, timeoutUnits)
+    timeout: TimeOut? = null
+): Command.CommandResult = Command(this).run(workingDir, timeout)
 
 /**
  * Launch command described by `this` list of strings. This extension is thread-blocking
  * @param workingDir working directory for command described by `this` string
- * @param timeout time-out for command described by `this` string. Default value is 10 000 milliseconds (10 seconds)
- * @param timeoutUnits time units for the timeout value. Default value is 10 000 milliseconds (10 seconds)
+ * @param timeout time-out for command described by `this` string. If null, no time-out applied
  * @see Command.run
  * @see Command
  */
 fun List<String>.runCommand(
     workingDir: File = currentWorkingDir(),
-    timeout: Long = 10_000L,
-    timeoutUnits: TimeUnit = TimeUnit.MILLISECONDS,
-): Command.CommandResult = Command(this).run(workingDir, timeout, timeoutUnits)
+    timeout: TimeOut? = null
+): Command.CommandResult = Command(this).run(workingDir, timeout)
